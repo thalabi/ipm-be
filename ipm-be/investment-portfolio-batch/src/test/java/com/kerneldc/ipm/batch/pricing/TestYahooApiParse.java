@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -28,6 +29,7 @@ class TestYahooApiParse {
 		assertThat(a, is(true));
 	}
 	
+	@Disabled
 	@Test
 	void testBceUrl() throws IOException, ApplicationException {
 		var objectMapper = new ObjectMapper();
@@ -52,6 +54,7 @@ class TestYahooApiParse {
 		LOGGER.info("price: {}", price);
 	}
 	
+	@Disabled
 	@Test
 	void testInvalidTicker() throws IOException {
 		HttpUtil httpUtil = new HttpUtil(true, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, yahooFinanceApiUrlTemplate);

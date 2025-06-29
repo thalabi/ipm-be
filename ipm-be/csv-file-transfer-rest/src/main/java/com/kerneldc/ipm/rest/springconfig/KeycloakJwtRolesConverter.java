@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class KeycloakJwtRolesConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
-	@Value("keycloak.username-attribute")
+	@Value("${keycloak.username-attribute}")
 	private String usernameAttribute;
 	/**
 	 * Prefix used for realm level roles.

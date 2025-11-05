@@ -1,0 +1,2 @@
+In instrument maintenence, add Duplicate button
+In Profolio Holding Management, change pop up tile from Holding to Instrument and in the Instrument drop down only include GIC that are not matured 

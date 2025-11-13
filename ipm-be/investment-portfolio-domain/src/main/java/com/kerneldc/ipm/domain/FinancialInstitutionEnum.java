@@ -17,6 +17,7 @@ public enum FinancialInstitutionEnum {
 	OAKEN_HOME_TRUST(627, 0),
 	DUCA(828, 21962), // transit number 21962
 	SAVEN(828, 65012), //transit number 65012
+	HUBERT(879, 44857),
 	;
 	
 	private int institutionNumber;

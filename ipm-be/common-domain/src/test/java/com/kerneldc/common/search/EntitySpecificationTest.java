@@ -242,6 +242,22 @@ class EntitySpecificationTest extends AbstractBaseTest {
 		var sunshineListList = sunshineListRepository.findAll(entitySpec);
 		assertThat(sunshineListList.size(), is(2));
 	}
+	@Test
+	void testEmptySeartchCriteriaValue(TestInfo testInfo) {
+		printTestName(testInfo);
+		var entityMetamodel = em.getMetamodel().entity(SunshineList.class);
+		var entitySpec = new EntitySpecification<SunshineList>(entityMetamodel, "firstName|equals|");
+		var s1 =createSunshineList1();
+		sunshineListRepository.saveAndFlush(s1);
+		assertThat(s1.getId(), is(1l));
+		var s2 =createSunshineList2();
+		sunshineListRepository.saveAndFlush(s2);
+		assertThat(s2.getId(), is(2l));
+		
+		
+		var sunshineListList = sunshineListRepository.findAll(entitySpec);
+		assertThat(sunshineListList.size(), is(2));
+	}
 
 	private Sales createSales1() {
 		var s1 = new Sales();

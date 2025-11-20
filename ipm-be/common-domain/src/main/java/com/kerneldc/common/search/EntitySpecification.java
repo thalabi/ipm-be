@@ -54,11 +54,16 @@ public class EntitySpecification<T> implements Specification<T> {
 			return;
 		}
 		this.entityMetamodel = entityMetamodel;
-		filterList = Arrays.asList(searchCriteria.split(",")).stream().map(criterion -> {
-			var criterionParts = criterion.split("\\|");
-			LOGGER.info("criterionParts: {}", Arrays.asList(criterionParts));
-			return new Filter(criterionParts[0], QueryOperatorEnum.fromName(criterionParts[1]), criterionParts[2]);
-		}).toList();
+		filterList = Arrays.stream(searchCriteria.split(","))
+			    .map(criterion -> criterion.split("\\|"))
+			    .filter(parts -> parts.length == 3)
+			    .peek(parts -> LOGGER.info("criterionParts: {}", Arrays.asList(parts)))
+			    .map(parts -> new Filter(
+			            parts[0],
+			            QueryOperatorEnum.fromName(parts[1]),
+			            parts[2]
+			        ))
+			    .toList();
 	}
 	
 	@Override

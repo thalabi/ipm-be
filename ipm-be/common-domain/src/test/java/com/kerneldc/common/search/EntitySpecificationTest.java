@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -223,6 +224,23 @@ class EntitySpecificationTest extends AbstractBaseTest {
 		
 		var sunshineListList = sunshineListRepository.findAll(entitySpec);
 		assertThat(sunshineListList.size(), is(1));
+	}
+
+	@Test
+	void testEmptySeartchCriteria(TestInfo testInfo) {
+		printTestName(testInfo);
+		var entityMetamodel = em.getMetamodel().entity(SunshineList.class);
+		var entitySpec = new EntitySpecification<SunshineList>(entityMetamodel, StringUtils.EMPTY);
+		var s1 =createSunshineList1();
+		sunshineListRepository.saveAndFlush(s1);
+		assertThat(s1.getId(), is(1l));
+		var s2 =createSunshineList2();
+		sunshineListRepository.saveAndFlush(s2);
+		assertThat(s2.getId(), is(2l));
+		
+		
+		var sunshineListList = sunshineListRepository.findAll(entitySpec);
+		assertThat(sunshineListList.size(), is(2));
 	}
 
 	private Sales createSales1() {

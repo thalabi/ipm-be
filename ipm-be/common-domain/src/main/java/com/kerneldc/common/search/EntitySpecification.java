@@ -63,14 +63,15 @@ public class EntitySpecification<T> implements Specification<T> {
 	
 	@Override
 	public Predicate toPredicate(Root<T> entity, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-		return buildSpecificationFromFilters().toPredicate(entity, query, criteriaBuilder);
+		var spec = buildSpecificationFromFilters();
+	    return spec == null ? null : spec.toPredicate(entity, query, criteriaBuilder);
 	}
 	
 	private Specification<T> buildSpecificationFromFilters() {
 		if (filterList.isEmpty()) {
-			return Specification.where(null);
+			return null;
 		}
-		Specification<T> specification = Specification.where(createSpecification(filterList.get(0)));
+		Specification<T> specification = createSpecification(filterList.get(0));
 		for (int i = 1; i < filterList.size(); i++) {
 			specification = specification.and(createSpecification(filterList.get(i)));
 		}

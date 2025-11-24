@@ -1,3 +1,6 @@
-In instrument maintenence, add Duplicate button
+In instrument maintenance, add Duplicate button
 In Portfolio Holding Management, in the Instrument drop down only include GIC that are not matured
+Add 29 Month term enum
+In instrument maintenane, show a circle i for instruements that matured
+In trigger instruments due notification, if non are trigger show message - non are due no email trigger.
 

@@ -5,6 +5,7 @@ public enum TermEnum {
 	TERM_1_YEAR,
 	TERM_18_MONTH,
 	TERM_2_YEAR,
+	TERM_29_MONTH,
 	TERM_3_YEAR,
 	TERM_4_YEAR,
 	TERM_5_YEAR,

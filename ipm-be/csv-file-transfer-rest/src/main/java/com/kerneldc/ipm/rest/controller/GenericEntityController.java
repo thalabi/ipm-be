@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kerneldc.common.domain.AbstractEntity;
 import com.kerneldc.common.enums.IEntityEnum;
-import com.kerneldc.common.search.EntitySpecification;
 import com.kerneldc.ipm.commonservices.enums.EntityEnumUtilities;
 import com.kerneldc.ipm.commonservices.repository.EntityRepositoryFactory;
+import com.kerneldc.searchspecification.EntitySpecification;
 
-import jakarta.persistence.EntityManager;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +29,6 @@ public class GenericEntityController {
 
 	private final EntityRepositoryFactory<?, ?> entityRepositoryFactory;
 	private final EntityRepresentationModelAssembler entityRepresentationModelAssembler;
-	private final EntityManager em;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping("/findAll")
@@ -43,9 +41,8 @@ public class GenericEntityController {
     	LOGGER.info("pageable: {}", pageable);
     	
     	var entityRepository = entityRepositoryFactory.getRepository(entityEnum);
-    	var entityMetamodel = em.getMetamodel().entity(entityEnum.getEntity());
     	
-    	var entitySpecification = new EntitySpecification<AbstractEntity>(entityMetamodel, search);
+    	var entitySpecification = new EntitySpecification<>(entityEnum.getEntity(), search);
     	
 		var page = entityRepository.findAll((Specification)entitySpecification, pageable);
         PagedModel<?> pagedModel; 

@@ -1,5 +1,6 @@
 package com.kerneldc.ipm.rest.csv.service.transformer;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -25,6 +26,10 @@ public class FileProcessingContext {
 	@Getter @Setter
 	private IEntityEnum uploadTableEnum;
 	@Getter @Setter
+	private Path inputFilePath;
+	@Getter @Setter
+	private Path outputFilePath;
+	@Getter @Setter
 	private Path workInProgressFile;
 	@Getter @Setter
 	private Long sourceCsvDataRowsCount;
@@ -47,6 +52,8 @@ public class FileProcessingContext {
 	
 	public FileProcessingContext(IEntityEnum uploadTableEnum) {
 		this.uploadTableEnum = uploadTableEnum;
+		inputFilePath = Paths.get(StringUtils.EMPTY);
+		outputFilePath = Paths.get(StringUtils.EMPTY);
 		workInProgressFile = Paths.get(StringUtils.EMPTY);
 		sourceCsvDataRowsCount = 0l;
 		sourceCsvHeaderColumns = new String[0];
@@ -81,8 +88,17 @@ public class FileProcessingContext {
 //		fileProcessingContext.beanTransformerExceptionList.clear();
 //		fileProcessingContext.persistExceptionsFileLineList.clear();
 //	}
+	
+	public File getInputFile() {
+		return inputFilePath.toFile();
+	}
+	public File getOutputFile() {
+		return outputFilePath.toFile();
+	}
 	public void clear() {
 		uploadTableEnum = null;
+		inputFilePath = Paths.get(StringUtils.EMPTY);
+		outputFilePath = Paths.get(StringUtils.EMPTY);
 		workInProgressFile = Paths.get(StringUtils.EMPTY);
 		sourceCsvHeaderColumns = null;
 		entityColumnNames = null;

@@ -41,8 +41,10 @@ import com.kerneldc.ipm.rest.csv.service.transformer.CsvFileTransformerService;
 import com.kerneldc.ipm.rest.csv.service.transformer.FileProcessingContext;
 import com.kerneldc.ipm.rest.csv.service.transformer.bean.IBeanTransformer;
 import com.kerneldc.ipm.rest.csv.service.transformer.bean.SalesBeanTransformerStage1;
+import com.kerneldc.ipm.rest.csv.service.transformer.csv.CsvSanitizerTransformer;
 import com.kerneldc.ipm.rest.csv.service.transformer.csv.ICsvFileTransformer;
 import com.kerneldc.ipm.rest.csv.service.transformer.csv.SalesFileTransformerStage1;
+import com.kerneldc.ipm.rest.csv.service.transformer.csv.SunshineListTransformerStage2;
 import com.kerneldc.ipm.rest.csv.service.transformer.exception.AbortFileProcessingException;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -92,7 +94,7 @@ class GenericFileTransferServiceTest {
 	}
 	
 	@Test
-	void testParseAndSave_withGoodFile() throws IOException, URISyntaxException {
+	void testParseAndSave_withGoodSalesFile() throws IOException, URISyntaxException {
 		var csvResourceName = "GenericFileTransferService/sales-good-file.csv";
 		var inputStream = getClass().getClassLoader().getResourceAsStream(csvResourceName);
 		
@@ -393,6 +395,41 @@ class GenericFileTransferServiceTest {
 				
 				() -> assertThat("Processing Stage", exceptionLine[17], is("CSV file to beans(opencsv)")));
 
+	}
+
+	
+	@Test
+	void testParseAndSave_withGoodSunshineListFile() throws IOException, URISyntaxException {
+		var csvResourceName = "GenericFileTransferService/sunshine-list-good-file.csv";
+		var inputStream = getClass().getClassLoader().getResourceAsStream(csvResourceName);
+		
+		var fixture = prepareFixture(csvResourceName, List.of(new SunshineListTransformerStage2()), List.of());
+		
+		var fileTransferResponse = fixture.parseAndSave(UploadTableEnum.SUNSHINE_LIST, csvResourceName, inputStream, true);
+		LOGGER.info("fileTransferResponse: {}", fileTransferResponse);
+		assertAll("fileTransferResponse",
+	() -> assertThat("fileTransferResponse", fileTransferResponse, is(notNullValue())),
+			() -> assertThat("numberOfLinesInFile", fileTransferResponse.getProcessingStats().getNumberOfLinesInFile(), is(3l)),
+			() -> assertThat("numberOfExceptions", fileTransferResponse.getProcessingStats().getNumberOfExceptions(), is(0)),
+			() -> assertThat("exceptionsFileName", fileTransferResponse.getExceptionsFileName(), nullValue()),
+			() -> assertThat("elapsedTime expected null", fileTransferResponse.getProcessingStats().getElapsedTime(), notNullValue()));
+	}
+
+	@Test
+	void testParseAndSave_withFieldEndingWithBackslash() throws IOException, URISyntaxException {
+		var csvResourceName = "GenericFileTransferService/sunshine-list-good-as-field-ending-w-backslash.csv";
+		var inputStream = getClass().getClassLoader().getResourceAsStream(csvResourceName);
+		
+		var fixture = prepareFixture(csvResourceName, List.of(new CsvSanitizerTransformer(), new SunshineListTransformerStage2()), List.of());
+		
+		var fileTransferResponse = fixture.parseAndSave(UploadTableEnum.SUNSHINE_LIST, csvResourceName, inputStream, true);
+		LOGGER.info("fileTransferResponse: {}", fileTransferResponse);
+		assertAll("fileTransferResponse",
+	() -> assertThat("fileTransferResponse", fileTransferResponse, is(notNullValue())),
+			() -> assertThat("numberOfLinesInFile", fileTransferResponse.getProcessingStats().getNumberOfLinesInFile(), is(4l)),
+			() -> assertThat("numberOfExceptions", fileTransferResponse.getProcessingStats().getNumberOfExceptions(), is(0)),
+			() -> assertThat("exceptionsFileName", fileTransferResponse.getExceptionsFileName(), nullValue()),
+			() -> assertThat("elapsedTime expected null", fileTransferResponse.getProcessingStats().getElapsedTime(), notNullValue()));
 	}
 
 	private List<String[]> readExceptionsFileLines(String exceptionsFileName) {

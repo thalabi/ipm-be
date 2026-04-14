@@ -40,23 +40,12 @@ public class HydroUsageFileTransformerStage1 implements ICsvFileTransformer {
 	@Override
 	public void transform(FileProcessingContext context) throws AbortFileProcessingException {
 
-		//var context = FileProcessingContext.get();
-		
-		Path inputFilePath = null;
-		Path outputFilePath = null;
-		try {
-			inputFilePath = AppFileUtils.createTempFile();
-			Files.copy(context.getWorkInProgressFile(), inputFilePath, StandardCopyOption.REPLACE_EXISTING);
-			outputFilePath = AppFileUtils.createTempFile();
-		} catch (IOException e) {
-			throw new AbortFileProcessingException(getTransformerName(), e);
-		}
-		context.setWorkInProgressFile(outputFilePath);
+		setUpFiles(context);
 		
         var lineNumber = 0l;
         
-		try (var csvReader = new CSVReader(new BufferedReader(new FileReader(inputFilePath.toFile())));
-				var csvWriter = new CSVWriter(new BufferedWriter(new FileWriter(outputFilePath.toFile())));) {
+		try (var csvReader = new CSVReader(new BufferedReader(new FileReader(context.getInputFile())));
+				var csvWriter = new CSVWriter(new BufferedWriter(new FileWriter(context.getOutputFile())));) {
         	// read first line and extract year
             String[] cells;
 			try {

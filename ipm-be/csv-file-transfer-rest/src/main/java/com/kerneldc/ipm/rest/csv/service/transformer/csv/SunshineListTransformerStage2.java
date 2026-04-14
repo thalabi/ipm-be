@@ -28,9 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-public class SunshineListTransformerStage1 implements ICsvFileTransformer {
+public class SunshineListTransformerStage2 implements ICsvFileTransformer {
 	
-	protected static final String TRANSFORMER_NAME = "SunshineListTransformerStage1";
+	protected static final String TRANSFORMER_NAME = "SunshineListTransformerStage2";
 
 	/**
 	 * This transformer will,
@@ -42,20 +42,10 @@ public class SunshineListTransformerStage1 implements ICsvFileTransformer {
 	@Override
 	public void transform(FileProcessingContext context) throws AbortFileProcessingException {
 
-		Path inputFilePath = null;
-		Path outputFilePath = null;
-		try {
-			inputFilePath = AppFileUtils.createTempFile();
-			Files.copy(context.getWorkInProgressFile(), inputFilePath, StandardCopyOption.REPLACE_EXISTING);
-			outputFilePath = AppFileUtils.createTempFile();
-		} catch (IOException e) {
-			throw new AbortFileProcessingException(getTransformerName(), e);
-		}
-		context.setWorkInProgressFile(outputFilePath);
-		LOGGER.info("outputFilePath: {}", outputFilePath);
+		setUpFiles(context);
 
-		try (var csvReader = new CSVReader(new BufferedReader(new FileReader(inputFilePath.toFile())));
-				var csvWriter = new CSVWriter(new BufferedWriter(new FileWriter(outputFilePath.toFile())));) {
+		try (var csvReader = new CSVReader(new BufferedReader(new FileReader(context.getInputFile())));
+				var csvWriter = new CSVWriter(new BufferedWriter(new FileWriter(context.getOutputFile())));) {
         	
 			String[] cells;
 			var lineNumber = 0;
@@ -134,7 +124,7 @@ public class SunshineListTransformerStage1 implements ICsvFileTransformer {
 	@Override
 	public boolean canHandle(IEntityEnum uploadTableEnum, TransformationStageEnum transformationStageEnum) {
 		return uploadTableEnum.equals(UploadTableEnum.SUNSHINE_LIST)
-				&& transformationStageEnum.equals(TransformationStageEnum.STAGE_ONE);
+				&& transformationStageEnum.equals(TransformationStageEnum.STAGE_TWO);
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class SaveHoldingRequest {
     private Long instrumentId;
     @NotNull
     private InstrumentTypeEnum instrumentType;
-    @Positive
+    @PositiveOrZero
     private BigDecimal quantity;
     @NotNull
     private OffsetDateTime asOfDate;

@@ -34,7 +34,8 @@ class InstrumentBondRepositoryTest {
 	void testInsertInstrumentBondRepository() {
 		var i = new Instrument();
 		i.setType(InstrumentTypeEnum.BOND);
-		i.setTicker("CIBC 5.144 04/28/25");
+//		i.setTicker("CIBC 5.144 04/28/25");
+		i.setTicker("CIBC 04/28/25");
 		i.setName("USCORP CIBC 5.144 04/28/25");
 		i.setCurrency(CurrencyEnum.USD);
 		var ib = new InstrumentBond();
@@ -49,6 +50,7 @@ class InstrumentBondRepositoryTest {
 		ib.setMaturityDate(offsetDateFromDateString("2025-04-28", dateFormatter1));
 		ib.setPaymentFrequency(PaymentFrequencyEnum.SEMIANNUALLY);
 		ib.setNextPaymentDate(offsetDateFromDateString("2023-10-28", dateFormatter1));
+		ib.setEmailNotification(true);
 		instrumentBondRepository.save(ib);
 		System.out.println("Instrument: " + i);
 		System.out.println("InstrumentBond: " + ib);

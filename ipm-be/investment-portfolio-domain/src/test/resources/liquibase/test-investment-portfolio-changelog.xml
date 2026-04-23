@@ -75,4 +75,14 @@
 
 	<include file="liquibase/investment-portfolio/portfolio/alter-colum-account-number.xml"/>
 
+
+	<include file="liquibase/investment-portfolio/instrument/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/instrument-detail/inst-bond/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/instrument-detail/inst-etf/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/instrument-detail/inst-interest-bearing/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/instrument-detail/inst-stock/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/position/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/price/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/portfolio/alter-id-to-autoincrement.xml"/>
+
 </databaseChangeLog>

@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@SequenceGenerator(name = "default_seq_gen", sequenceName = "hydro_usage_seq", allocationSize = 1)
 @Getter @Setter
 
 public class HydroUsage extends AbstractPersistableEntity {

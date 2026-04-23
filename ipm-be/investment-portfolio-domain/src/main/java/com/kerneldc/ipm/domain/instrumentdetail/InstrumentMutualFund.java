@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity(name = "inst_mutual_fund")
-@SequenceGenerator(name = "default_seq_gen", sequenceName = "inst_mutual_fund_seq", allocationSize = 1)
 @Getter @Setter
 public class InstrumentMutualFund extends AbstractInstrumentDetailEntity implements IInstrumentDetail {
 	

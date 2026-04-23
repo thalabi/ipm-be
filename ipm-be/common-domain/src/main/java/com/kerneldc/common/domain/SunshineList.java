@@ -14,7 +14,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@SequenceGenerator(name = "default_seq_gen", sequenceName = "sunshine_list_seq", allocationSize = 1)
 @Getter @Setter
 
 public class SunshineList extends AbstractPersistableEntity {

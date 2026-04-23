@@ -22,7 +22,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity(name = "inst_interest_bearing")
-@SequenceGenerator(name = "default_seq_gen", sequenceName = "inst_interest_bearing_seq", allocationSize = 1)
 @EntityListeners(FixedIncomeListener.class)
 @Getter @Setter
 public class InstrumentInterestBearing extends AbstractInstrumentDetailEntity implements IFixedPriceInstrumentDetail {

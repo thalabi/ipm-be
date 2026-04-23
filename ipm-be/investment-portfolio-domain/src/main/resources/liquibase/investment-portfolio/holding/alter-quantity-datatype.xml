@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+    xsi:schemaLocation="
+    	http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <changeSet id="alter-quantity-datatype" author="thalabi">
+
+		<dropView viewName="instrument_by_account_v"/>
+		<dropView viewName="instrument_due_v"/>
+		
+		<modifyDataType tableName="holding" columnName="quantity" newDataType="decimal(12,5)"/>
+		
+		<createView viewName="instrument_by_account_v">
+			<![CDATA[
+		
+		SELECT row_number() OVER (ORDER BY i.ticker) AS id,
+        CASE
+            WHEN i.type::text = 'STOCK'::text OR i.type::text = 'ETF'::text THEN i.ticker
+            ELSE 'N/A'::character varying
+        END AS ticker,
+    i.name AS instrument_name,
+    h.quantity,
+    p.portfolio_id,
+    p.name AS account_name
+   FROM holding h
+     JOIN instrument i ON h.instrument_id = i.id
+     JOIN portfolio p ON h.portfolio_id = p.id
+  WHERE i.ticker::text <> 'CASH'::text;
+  
+  			]]>    
+
+		</createView>
+		<createView viewName="instrument_due_v">
+			<![CDATA[
+
+WITH latest_as_of_date_holding_inst_ids AS (
+         SELECT h2.instrument_id
+           FROM holding h2
+          WHERE ((h2.as_of_date, h2.instrument_id, h2.portfolio_id) IN ( SELECT max(h.as_of_date) AS as_of_date,
+                    h.instrument_id,
+                    h.portfolio_id
+                   FROM holding h
+                  GROUP BY h.instrument_id, h.portfolio_id))
+        )
+ SELECT h.id,
+    p.financial_institution AS portfolio_fi,
+    p.holder AS portfolio_holder,
+    p.name AS portfolio_name,
+    p.portfolio_id AS portfolio_account_number,
+    i.name AS instrument_name,
+    iib.account_number AS instrument_account_number,
+    iib.registered_account,
+    i.currency,
+    iib.type,
+    iib.financial_institution AS issuer_fi,
+    substr(iib.term::text, 6) AS term,
+    iib.price,
+    h.quantity,
+    iib.interest_rate,
+    iib.maturity_date,
+    iib.promotional_interest_rate,
+    iib.promotion_end_date,
+    NULL::character varying(255) AS issuer_entity,
+    NULL::character varying(9) AS cusip,
+    NULL::numeric(10,4) AS coupon,
+    NULL::timestamp(3) with time zone AS issue_date,
+    NULL::character varying(255) AS payment_frequency,
+    NULL::timestamp(3) with time zone AS next_payment_date,
+    iib.email_notification,
+        CASE
+            WHEN iib.maturity_date IS NOT NULL THEN iib.maturity_date
+            WHEN iib.promotion_end_date IS NOT NULL THEN iib.promotion_end_date
+            ELSE NULL::timestamp with time zone
+        END::timestamp(3) with time zone AS due_date,
+    i.notes
+   FROM inst_interest_bearing iib
+     JOIN instrument i ON iib.instrument_id = i.id
+     JOIN holding h ON h.instrument_id = i.id
+     JOIN latest_as_of_date_holding_inst_ids hi ON hi.instrument_id = i.id
+     JOIN portfolio p ON h.portfolio_id = p.id
+UNION
+ SELECT h.id,
+    p.financial_institution AS portfolio_fi,
+    p.holder AS portfolio_holder,
+    p.name AS portfolio_name,
+    p.portfolio_id AS portfolio_account_number,
+    i.name AS instrument_name,
+    NULL::character varying(16) AS instrument_account_number,
+    NULL::character varying(4) AS registered_account,
+    i.currency,
+    'BOND'::character varying(255) AS type,
+    NULL::numeric(4,0) AS issuer_fi,
+    NULL::character varying(6) AS term,
+    ib.price,
+    h.quantity,
+    NULL::numeric(7,4) AS interest_rate,
+    ib.maturity_date,
+    NULL::numeric(7,4) AS promotional_interest_rate,
+    NULL::timestamp(3) with time zone AS promotion_end_date,
+    ib.issuer AS issuer_entity,
+    ib.cusip,
+    ib.coupon,
+    ib.issue_date,
+    ib.payment_frequency,
+    ib.next_payment_date,
+    ib.email_notification,
+    ib.next_payment_date AS due_date,
+    i.notes
+   FROM inst_bond ib
+     JOIN instrument i ON ib.instrument_id = i.id
+     JOIN holding h ON h.instrument_id = i.id
+     JOIN latest_as_of_date_holding_inst_ids hi ON hi.instrument_id = i.id
+     JOIN portfolio p ON h.portfolio_id = p.id;
+		
+			]]>    
+		</createView>
+
+    </changeSet>
+</databaseChangeLog>

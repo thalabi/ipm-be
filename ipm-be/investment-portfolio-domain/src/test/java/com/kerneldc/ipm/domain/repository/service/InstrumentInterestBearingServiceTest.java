@@ -10,10 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.util.DigestUtils;
 
+import com.kerneldc.common.exception.RecordIntegrityViolationException;
 import com.kerneldc.ipm.domain.instrumentdetail.InstrumentInterestBearing;
 import com.kerneldc.ipm.domain.repository.instrumentdetail.InstrumentInterestBearingRepositoryTest;
 import com.kerneldc.ipm.repository.instrumentdetail.InstrumentInterestBearingRepository;
@@ -41,14 +41,14 @@ class InstrumentInterestBearingServiceTest {
 		var iib2 = InstrumentInterestBearingRepositoryTest.moneyMarket();
 
 		instrumentInterestBearingRepositoryService.save(iib);
-		instrumentInterestBearingRepositoryService.save(iib2);
 		
-		var exception = assertThrows(DataIntegrityViolationException.class, () -> {
+		var exception = assertThrows(RuntimeException.class, () -> {
 			// have to use JpaRepository instead of EntityManager since it wraps the ConstraintViolationException with DataIntegrityViolationException
-			jpaRepository.flush();
+			instrumentInterestBearingRepositoryService.save(iib2);
+//			jpaRepository.flush();
 	    });
 
-		assertThat(exception).isInstanceOf(DataIntegrityViolationException.class);
+		assertThat(exception).isInstanceOf(RecordIntegrityViolationException.class);
 	}
 
 	@Test

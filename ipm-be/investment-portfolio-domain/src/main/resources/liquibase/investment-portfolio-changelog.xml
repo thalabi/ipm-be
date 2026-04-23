@@ -64,13 +64,13 @@
 	<include file="liquibase/investment-portfolio/instrument/drop-unique-constrain-1.xml"/>
 	<include file="liquibase/investment-portfolio/instrument/drop-exchange.xml"/>
 
-	<include file="liquibase/investment-portfolio/instrument-detail/inst-money-market/create-table.xml"/>
-	<include file="liquibase/investment-portfolio/instrument-detail/inst-money-market/create-unique-constraint-lk.xml"/>
+<!--	<include file="liquibase/investment-portfolio/instrument-detail/inst-money-market/create-table.xml"/>-->
+<!--	<include file="liquibase/investment-portfolio/instrument-detail/inst-money-market/create-unique-constraint-lk.xml"/>-->
 
 	<include file="liquibase/investment-portfolio/instrument/data/fix-lk.xml"/>
 
-	<include file="liquibase/investment-portfolio/instrument-detail/inst-money-market/data/populate.xml"/>
-	<include file="liquibase/investment-portfolio/instrument-detail/inst-money-market/data/populate-2.xml"/>
+<!--	<include file="liquibase/investment-portfolio/instrument-detail/inst-money-market/data/populate.xml"/>-->
+<!--	<include file="liquibase/investment-portfolio/instrument-detail/inst-money-market/data/populate-2.xml"/>-->
 
 	<include file="liquibase/investment-portfolio/instrument-detail/inst-bond/create-table.xml"/>
 	<include file="liquibase/investment-portfolio/instrument-detail/inst-bond/create-unique-constraint-lk.xml"/>
@@ -129,5 +129,20 @@
 	<include file="liquibase/investment-portfolio/portfolio/alter-colum-account-number.xml"/>
 	<include file="liquibase/investment-portfolio/instrument-due-v/rename-account-number.xml"/>
 	<include file="liquibase/investment-portfolio/instrument-by-account-v/rename-account-number.xml"/>
+	
+	<include file="liquibase/investment-portfolio/holding/alter-quantity-datatype.xml"/>
+	<include file="liquibase/investment-portfolio/position/alter-quantity-datatype.xml"/>
+	
+	<include file="liquibase/investment-portfolio/portfolio/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/exchange-rate/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/holding/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/instrument-detail/inst-bond/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/instrument-detail/inst-etf/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/instrument-detail/inst-interest-bearing/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/instrument-detail/inst-mutual-fund/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/instrument-detail/inst-stock/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/instrument/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/position/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/investment-portfolio/price/alter-id-to-autoincrement.xml"/>
 
 </databaseChangeLog>

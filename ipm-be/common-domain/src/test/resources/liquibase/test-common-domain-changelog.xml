@@ -16,9 +16,12 @@
 	<include file="liquibase/fileTransfer/sales/alter-columns-price-latitude-and-longitude.xml"/>
 
 	<include file="liquibase/fileTransfer/sunshine-list/create-table.xml"/>
-	<include file="liquibase/fileTransfer/sunshine-list/create-unique-constraint-1.xml"/>
 	<include file="liquibase/fileTransfer/sunshine-list/create-unique-constraint-lk.xml"/>
+	<include file="liquibase/fileTransfer/sunshine-list/create-unique-constraint-1.xml"/>
 	<include file="liquibase/fileTransfer/sunshine-list/rename-year-column.xml"/>
 	<include file="liquibase/fileTransfer/sunshine-list/alter-column-salary-and-benefits.xml"/>
+
+	<include file="liquibase/fileTransfer/sales/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/fileTransfer/sunshine-list/alter-id-to-autoincrement.xml"/>
 
 </databaseChangeLog>

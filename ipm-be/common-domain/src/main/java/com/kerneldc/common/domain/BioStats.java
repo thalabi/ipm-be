@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@SequenceGenerator(name = "default_seq_gen", sequenceName = "bio_stats_seq", allocationSize = 1)
 @Getter @Setter
 
 public class BioStats extends AbstractPersistableEntity {

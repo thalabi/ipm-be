@@ -14,7 +14,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Entity
-@SequenceGenerator(name = "default_seq_gen", sequenceName = "portfolio_seq", allocationSize = 1)
 @Getter @Setter
 @Slf4j
 public class Portfolio extends AbstractPersistableEntity {

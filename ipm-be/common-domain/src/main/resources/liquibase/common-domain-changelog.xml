@@ -32,4 +32,10 @@
 	<include file="liquibase/fileTransfer/sunshine-list/rename-year-column.xml"/>
 	<include file="liquibase/fileTransfer/sunshine-list/alter-column-salary-and-benefits.xml"/>
 
+	<include file="liquibase/fileTransfer/area-code/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/fileTransfer/bio-stats/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/fileTransfer/hydro-usage/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/fileTransfer/sales/alter-id-to-autoincrement.xml"/>
+	<include file="liquibase/fileTransfer/sunshine-list/alter-id-to-autoincrement.xml"/>
+
 </databaseChangeLog>

@@ -19,7 +19,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@SequenceGenerator(name = "default_seq_gen", sequenceName = "price_seq", allocationSize = 1)
 @Getter @Setter
 public class Price extends AbstractPersistableEntity {
 	

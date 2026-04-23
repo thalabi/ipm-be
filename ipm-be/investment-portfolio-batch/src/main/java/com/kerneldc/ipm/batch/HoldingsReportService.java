@@ -106,6 +106,7 @@ public class HoldingsReportService {
 		XSSFCellStyle dateStyle,
 		XSSFCellStyle dateStylePink,
 		XSSFCellStyle boldStyle,
+		XSSFCellStyle quantityStyle,
 		XSSFCellStyle totalAmountStyle,
 		Map<HolderEnum, XSSFCellStyle> holderCellStyleMap) {}
 	
@@ -228,7 +229,8 @@ public class HoldingsReportService {
 		fixedIncomeSheet.addIgnoredErrors(CellRangeAddress.valueOf("e2:e999"), IgnoredErrorType.NUMBER_STORED_AS_TEXT);
 		fixedIncomeSheet.addIgnoredErrors(CellRangeAddress.valueOf("f2:f999"), IgnoredErrorType.NUMBER_STORED_AS_TEXT);
 		var format = workbook.createDataFormat();
-		var amountFormat = format.getFormat("###,##0.00##");
+		var quantityFormat = format.getFormat("#,###,##0.0####");
+		var amountFormat = format.getFormat("#,###,##0.00");
 		var rateFormat = format.getFormat("##0.####");
 		var dateFormat = format.getFormat("yyyy-mm-dd");
 
@@ -254,6 +256,10 @@ public class HoldingsReportService {
 		var arialFontStyle = workbook.createCellStyle();
 		arialFontStyle.setFont(arialFont);
 
+		var quantityStyle = workbook.createCellStyle();
+		quantityStyle.setFont(arialFont);
+		quantityStyle.setDataFormat(quantityFormat);
+		
 		var amountStyle = workbook.createCellStyle();
 		amountStyle.setFont(arialFont);
 		amountStyle.setDataFormat(amountFormat);
@@ -297,7 +303,7 @@ public class HoldingsReportService {
 		return new PoiContext(rowNumberMap, workbook, sheetMap, arialFontBold, arialFontItalic,
 				boldFontGreenBackground,
 				arialFontStyle, amountStyle, rateStyle, dateStyle,
-				dateStylePink, boldStyle, totalAmountStyle,
+				dateStylePink, boldStyle, quantityStyle, totalAmountStyle,
 				holderCellStyleMap);
 	}
 	
@@ -511,6 +517,7 @@ public class HoldingsReportService {
 
 		var arialFontStyle = poiContext.arialFontStyle;
 		var amountStyle = poiContext.amountStyle;
+		var quantityStyle = poiContext.quantityStyle;
 		var totalAmountStyle = poiContext.totalAmountStyle;
 
 		var oldFinancialInstitution = StringUtils.EMPTY;
@@ -602,7 +609,7 @@ public class HoldingsReportService {
 			// Quantity
 			cell = row.createCell(EQ_QUANTITY_CELL);
 			cell.setCellType(CellType.NUMERIC);
-			cell.setCellStyle(amountStyle);
+			cell.setCellStyle(quantityStyle);
 			cell.setCellValue(equityReport.getQuantity().doubleValue());
 			
 			// Price

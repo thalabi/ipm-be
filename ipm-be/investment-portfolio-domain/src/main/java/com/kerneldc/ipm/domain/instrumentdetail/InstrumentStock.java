@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity(name = "inst_stock")
-@SequenceGenerator(name = "default_seq_gen", sequenceName = "inst_stock_seq", allocationSize = 1)
 @Getter @Setter
 public class InstrumentStock extends AbstractInstrumentDetailEntity implements IListedInstrumentDetail {
 	

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+    xsi:schemaLocation="
+    	http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <changeSet id="alter-quantity-datatype" author="thalabi">
+    
+   		<dropView viewName="holding_price_interday_v"/>
+
+		<modifyDataType tableName="position" columnName="quantity" newDataType="decimal(12,5)"/>
+		
+		<createView viewName="holding_price_interday_v">
+			<![CDATA[
+WITH latest_date AS (
+         SELECT max(exchange_rate.as_of_date) AS as_of_date
+           FROM exchange_rate
+          WHERE exchange_rate.from_currency::text = 'USD'::text AND exchange_rate.to_currency::text = 'CAD'::text
+        ), rate_on_latest_date AS (
+         SELECT er.rate
+           FROM exchange_rate er
+             JOIN latest_date ON er.as_of_date = latest_date.as_of_date AND er.from_currency::text = 'USD'::text AND er.to_currency::text = 'CAD'::text
+        ), cad_and_usd_values AS (
+         SELECT po.position_snapshot,
+            sum(po.quantity * pr.price) AS market_value
+           FROM "position" po
+             JOIN instrument i ON po.instrument_id = i.id
+             JOIN price pr ON po.price_id = pr.id
+          WHERE i.currency::text = 'CAD'::text
+          GROUP BY po.position_snapshot
+        UNION ALL
+         SELECT po.position_snapshot,
+            sum(po.quantity * pr.price * (( SELECT rate_on_latest_date.rate
+                   FROM rate_on_latest_date))) AS market_value
+           FROM "position" po
+             JOIN instrument i ON po.instrument_id = i.id
+             JOIN price pr ON po.price_id = pr.id
+          WHERE i.currency::text = 'USD'::text
+          GROUP BY po.position_snapshot
+        )
+ SELECT row_number() OVER (ORDER BY cad_and_usd_values.position_snapshot) AS id,
+    cad_and_usd_values.position_snapshot,
+    sum(cad_and_usd_values.market_value) AS market_value
+   FROM cad_and_usd_values
+  GROUP BY cad_and_usd_values.position_snapshot
+  ORDER BY cad_and_usd_values.position_snapshot;
+   			]]>
+		</createView>
+		
+    </changeSet>
+</databaseChangeLog>

@@ -16,7 +16,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@SequenceGenerator(name = "default_seq_gen", sequenceName = "instrument_seq", allocationSize = 1)
 @Getter @Setter
 public class Instrument extends AbstractPersistableEntity {
 	

@@ -18,7 +18,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity(name = "inst_bond")
-@SequenceGenerator(name = "default_seq_gen", sequenceName = "inst_bond_seq", allocationSize = 1)
 @EntityListeners(FixedIncomeListener.class)
 @Getter @Setter
 public class InstrumentBond extends AbstractInstrumentDetailEntity implements IFixedPriceInstrumentDetail {

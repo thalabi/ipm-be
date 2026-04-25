@@ -15,7 +15,7 @@ public interface IHoldingDetail {
 	//String getExchange();
 	String getCurrency();
 	String getName();
-	Float getQuantity();
+	Double getQuantity();
 	BigDecimal getLatestPrice();
 	// This was changed from type OffsetDateTime, as a workaround to 'org.hibernate.MappingException: No Dialect mapping for JDBC type: 2014' exception
 	String getLatestPriceTimestamp();

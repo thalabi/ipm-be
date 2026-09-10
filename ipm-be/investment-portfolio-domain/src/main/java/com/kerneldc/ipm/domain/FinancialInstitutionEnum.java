@@ -18,6 +18,7 @@ public enum FinancialInstitutionEnum {
 	DUCA(828, 21962), // transit number 21962
 	SAVEN(828, 65012), //transit number 65012
 	HUBERT(879, 44857),
+	WEALTH_ONE(370, 80082),
 	;
 	
 	private int institutionNumber;
